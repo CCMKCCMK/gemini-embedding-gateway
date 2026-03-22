@@ -1,0 +1,30 @@
+# ============================================================
+# docker-compose.yml
+# 一条命令启动本地 Gateway
+# 使用方法：先填写 .env 文件，然后运行 docker-compose up -d
+# ============================================================
+version: "3.9"
+
+services:
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gemini-embedding-gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    volumes:
+      - ./logs:/app/logs  # 可选：持久化日志
+    labels:
+      - "com.project=gemini-embedding-gateway"
+      - "com.version=2.0"
