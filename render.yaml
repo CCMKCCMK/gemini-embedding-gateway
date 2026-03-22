@@ -1,0 +1,35 @@
+# ============================================================
+# render.yaml - Render.com 三节点蓝图
+# 一次点击在 3 个区域部署代理节点
+# 使用方法：在 render.com → New → Blueprint 导入此仓库
+# ============================================================
+services:
+  # 节点 1：新加坡（距中国最近，首选）
+  - type: web
+    name: gemini-proxy-sg
+    runtime: docker
+    dockerfilePath: ./proxy/Dockerfile
+    dockerContext: ./proxy
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+
+  # 节点 2：法兰克福（欧洲备用）
+  - type: web
+    name: gemini-proxy-frankfurt
+    runtime: docker
+    dockerfilePath: ./proxy/Dockerfile
+    dockerContext: ./proxy
+    region: frankfurt
+    plan: free
+    healthCheckPath: /health
+
+  # 节点 3：俄勒冈（美西备用）
+  - type: web
+    name: gemini-proxy-oregon
+    runtime: docker
+    dockerfilePath: ./proxy/Dockerfile
+    dockerContext: ./proxy
+    region: oregon
+    plan: free
+    healthCheckPath: /health
